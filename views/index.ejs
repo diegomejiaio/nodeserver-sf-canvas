@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Demo </title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <link href="jsonTree.css" rel="stylesheet" />
+    <script src="jsonTree.js"></script>
+
+</head>
+
+<body>
+    <div class="container-fluid">
+
+        <div class="jumbotron">
+            <h1 class="display-4"> Canvas App Workinga as Expected </h1>
+            <p class="lead">
+
+                <!-- Showing basic user data -->
+            <ul>
+                <li> User ID: <%= typeof userId !=='undefined' ? userId : 'N/A' %>
+                </li>
+                <li> User Name: <%= typeof userName !=='undefined' ? userName : 'N/A' %>
+                </li>
+                <li> User Email: <%= typeof userEmail !=='undefined' ? userEmail : 'N/A' %>
+                </li>
+                <li> User Profile: <%= typeof userProfile !=='undefined' ? userProfile : 'N/A' %>
+                </li>
+                <li> User Profile ID: <%= typeof userProfileId !=='undefined' ? userProfileId : 'N/A' %>
+                </li>
+                <li> User Org ID: <%= typeof userOrgId !=='undefined' ? userOrgId : 'N/A' %>
+                </li>
+                <li> User Org Name: <%= typeof userOrgName !=='undefined' ? userOrgName : 'N/A' %>
+                </li>
+                <li> Users must be preapproved for signed request, otherwise OAuth flow would be needed. </li>
+            </ul>
+            </p>
+        </div>
+
+        <p>
+        <div id="reqCode">
+
+        </div>
+        </p>
+
+    </div>
+    <script>
+        try {
+            // Get the raw string
+            let req = `<%- req %>`;
+
+            // Create a temporary element to decode HTML entities
+            const decoder = document.createElement('textarea');
+            decoder.innerHTML = req;
+            const decodedJson = decoder.value;
+
+            var wrapper = document.getElementById("reqCode");
+            var data = JSON.parse(decodedJson);
+            console.log("Decoded JSON:", data);
+            if (data) {
+                var tree = jsonTree.create(data, wrapper);
+            } else {
+                wrapper.innerHTML = "No data available";
+            }
+        } catch (e) {
+            console.error("Error parsing JSON:", e);
+            document.getElementById("reqCode").innerHTML = "Error parsing JSON data: " + e.message;
+        }
+    </script>
+</body>
+
+</html>
