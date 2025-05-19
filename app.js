@@ -20,31 +20,32 @@ app.get("/", function (req, res) {
 });
 
 app.post("/", function (req, res) {
-  console.log("req.body", req.body);
-  console.log("req.body.signed_request", req.body.signed_request);
-  console.log("req.body.signed_request.length", req.body.signed_request.length);
-  console.log("req.body.signed_request[0]", req.body.signed_request[0]);
-  console.log("req.body.signed_request[1]", req.body.signed_request[1]);
+  // console.log("req.body", req.body);
+  // console.log("req.body.signed_request", req.body.signed_request);
+  // console.log("req.body.signed_request.length", req.body.signed_request.length);
+  // console.log("req.body.signed_request[0]", req.body.signed_request[0]);
+  // console.log("req.body.signed_request[1]", req.body.signed_request[1]);
   var bodyArray = req.body.signed_request.split(".");
-  console.log("bodyArray", bodyArray);
+  // console.log("bodyArray", bodyArray);
   var consumerSecret = bodyArray[0];
-  console.log("consumerSecret", consumerSecret);
+  // console.log("consumerSecret", consumerSecret);
   var encoded_envelope = bodyArray[1];
-  console.log("encoded_envelope", encoded_envelope);
+  // console.log("encoded_envelope", encoded_envelope);
 
   var check = crypto
     .createHmac("sha256", consumerSecretApp)
     .update(encoded_envelope)
     .digest("base64");
 
-  console.log("check", check);
+  // console.log("check", check);
 
   if (check === consumerSecret) {
     var envelope = JSON.parse(new Buffer(encoded_envelope, "base64").toString("ascii"));
     //req.session.salesforce = envelope;
-    console.log("got the session object:");
-    console.log(envelope);
-    console.log(JSON.stringify(envelope)); res.render("index", {
+    // console.log("got the session object:");
+    // console.log(envelope);
+    // console.log(JSON.stringify(envelope));
+    res.render("index", {
       title: envelope.context.user.userName,
       req: JSON.stringify(envelope).replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
