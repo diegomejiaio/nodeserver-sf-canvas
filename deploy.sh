@@ -2,6 +2,19 @@
 
 set -e  # Detener el script si ocurre un error
 
+# Load environment variables from .env file
+if [ -f .env ]; then
+    export $(cat .env | grep -v '^#' | xargs)
+else
+    echo "❌ Error: .env file not found"
+    exit 1
+fi
+
+# Check if CANVAS_CONSUMER_SECRET is set
+if [ -z "$CANVAS_CONSUMER_SECRET" ]; then
+    echo "❌ Error: CANVAS_CONSUMER_SECRET is not set in .env file"
+    exit 1
+fi
 # Variables de configuración
 RG="fs-canvas-webapp-01"
 APP_NAME="sfcanvaswebapp002"
@@ -114,7 +127,8 @@ az webapp config appsettings set \
     --settings \
         WEBSITES_PORT=80 \
         WEBSITES_CONTAINER_START_TIME_LIMIT=1800 \
-        WEBSITES_ENABLE_APP_SERVICE_STORAGE=false
+        WEBSITES_ENABLE_APP_SERVICE_STORAGE=false \
+        CANVAS_CONSUMER_SECRET="$CANVAS_CONSUMER_SECRET"
 
 # Reiniciar la Web App
 echo "14) 🔄 Reiniciando la Web App..."

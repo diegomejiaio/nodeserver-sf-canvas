@@ -4,9 +4,13 @@ var express = require("express"),
 var app = express();
 var crypto = require("crypto");
 var consumerSecretApp = process.env.CANVAS_CONSUMER_SECRET;
+if (!consumerSecretApp) {
+  console.error('Error: CANVAS_CONSUMER_SECRET environment variable is required for Salesforce Canvas authentication');
+  process.exit(1); // Exit if the secret is not configured
+}
 
-
-console.log("consumer secret - " + consumerSecretApp);
+// Remove the console.log of the secret for security
+console.log("Salesforce Canvas authentication configured");
 
 app.use(express.static(path.join(__dirname, "views")));
 app.set("view engine", "ejs");
